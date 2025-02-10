@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: dashboard.php");
         exit();
     } else {
-        $error = "Sai tài khoản hoặc mật khẩu!";
+        $error = "Wrong account or password!";
     }
 }
 $conn->close();

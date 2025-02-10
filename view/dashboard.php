@@ -35,9 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Kiểm tra mật khẩu cũ
     if (!password_verify($current_password, $stored_password)) {
-        $error = "Mật khẩu hiện tại không đúng!";
+        $error = "Current password is incorrect!";
     } elseif ($new_password !== $confirm_password) {
-        $error = "Mật khẩu mới không khớp!";
+        $error = "New password does not match!";
     } else {
         // Cập nhật mật khẩu mới
         $new_hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $update_stmt = $conn->prepare($update_sql);
         $update_stmt->bind_param("ss", $new_hashed_password, $username);
         if ($update_stmt->execute()) {
-            $success = "Đổi mật khẩu thành công!";
+            $success = "Password changed successfully!";
         } else {
             $error = "Có lỗi xảy ra!";
         }
