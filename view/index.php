@@ -63,10 +63,10 @@ $conn->close();
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px gray;
-            width: 300px;
+            width: 600px;
         }
         .overlay {
             position: fixed;
@@ -86,6 +86,15 @@ $conn->close();
             cursor: pointer;
             float: right;
         }
+        input{
+            height: 50px;
+            font-size: 30px !important;
+        }
+        button{
+            height: 50px;
+            font-size: 20px !important;
+            font-weight: bold !important;
+        }
     </style>
 </head>
 <body>
@@ -94,8 +103,8 @@ $conn->close();
         <h3>Log in</h3>
         <?php if ($error) echo "<p style='color:red;'>".htmlspecialchars($error)."</p>"; ?>
         <form method="post">
-            <input type="text" name="username" placeholder="Username" required class="form-control mb-2">
-            <input type="password" name="password" placeholder="Password" required class="form-control mb-2">
+            <input type="text" name="username" placeholder="Username" required class="form-control mb-4 mt-3">
+            <input type="password" name="password" placeholder="Password" required class="form-control mb-4">
             <button type="submit" class="btn btn-success w-100">Log in</button>
         </form>
     </div>

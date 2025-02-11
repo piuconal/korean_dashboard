@@ -91,6 +91,7 @@ $conn->close();
             display: none;
         }
         .custom-btn {
+            width: 400px !important;
             padding: 40px; /* Tăng kích thước nút */
             font-size: 1.2rem; /* Tăng cỡ chữ */
             font-weight: bold;
@@ -110,7 +111,14 @@ $conn->close();
             color: blue;
             z-index: 1000;
         }
-
+        .nav-item button{
+            height: 50px;
+            font-size: 20px;
+        }
+        .nav-item a{
+            height: 50px;
+            font-size: 23px;
+        }
     </style>
     <script>
         function openPopup() {
@@ -142,26 +150,26 @@ $conn->close();
 
 <!-- Nội dung chính -->
 <div class="container text-center mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="row">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row justify-content-between">
                 <div class="col-6 mb-5">
-                    <button class="btn btn-primary btn-lg w-100 custom-btn" onclick="openExcel()">Payment History</button>
+                    <button class="btn btn-primary btn-lg w-100 custom-btn py-4 fs-3" onclick="openExcel()">Payment History</button>
                 </div>
                 <div class="col-6 mb-5">
-                    <button class="btn btn-success btn-lg w-100 custom-btn" onclick="runSolvePy()">Date Calculator</button>
+                    <button class="btn btn-success btn-lg w-100 custom-btn py-4 fs-3" onclick="runSolvePy()">Date Calculator</button>
                 </div>
                 <div class="col-6">
-                    <button class="btn btn-info btn-lg w-100 custom-btn" onclick="openIncomeManage()">Income Manage</button>
+                    <button class="btn btn-info btn-lg w-100 custom-btn py-4 fs-3" onclick="openIncomeManage()">Income Manage</button>
                 </div>
                 <div class="col-6">
-                    <button class="btn btn-danger btn-lg w-100 custom-btn">Statics</button>
+                    <button class="btn btn-danger btn-lg w-100 custom-btn py-4 fs-3">Statics</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<p id="loadingMessage" style="display: none; color: blue;">Đang mở file Excel...</p>
+<p id="loadingMessage" style="display: none; color: blue;">Opening Excel file...</p>
 
 <!-- Overlay -->
 <div class="overlay" id="overlay"></div>

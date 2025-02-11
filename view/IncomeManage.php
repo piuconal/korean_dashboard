@@ -1,3 +1,14 @@
+<?php
+session_start();
+include '../db/connect.php';
+
+// Kiểm tra nếu chưa đăng nhập thì chuyển hướng về index.php
+if (!isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
