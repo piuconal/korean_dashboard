@@ -5,49 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-image: url("../img/bg.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-        .search-container {
-            margin: 20px auto;
-            max-width: 600px;
-        }
-        .content-container {
-            width: 100%;
-            padding: 20px;
-        }
-        .table-container {
-            max-height: 520px; /* Giới hạn chiều cao */
-            overflow-y: auto; /* Thêm thanh cuộn */
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-        }
-        .box {
-            display: inline-block;
-            padding: 10px;
-            margin: 5px;
-            border-radius: 5px;
-            background-color: lightblue;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .total-box {
-            padding: 10px 15px;
-            border-radius: 8px;
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-            min-width: 120px;
-            text-align: center;
-            margin-left: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+    <link rel="stylesheet" href="../view/css/income_manage.css">
 </head>
 <body>
 
@@ -72,8 +30,29 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <div id="modalTitleContainer" class="modal-title-container">
+                    <h5 id="modalTitle" class="modal-title">Thông tin khu vực</h5>
+                </div>
+                <input type="text" id="searchShip" class="form-control ms-3" placeholder="Search..." style="max-width: 240px;">
+            </div>
+            <div class="modal-body">
+                <div id="modalBody"></div>
+                <div class="ship-list-container">
+                    <div id="shipList" class="ship-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="../view/js/income_manage.js"></script>
+<script src="../view/js/listship.js"></script>
 </body>
 </html>
