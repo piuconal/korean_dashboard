@@ -75,5 +75,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ✅ Gọi lại filter sau khi dữ liệu đã load
     setupSearch();
+
+    // Xử lý sự kiện khi ấn "Select"
+    document.querySelectorAll(".selectSeaman").forEach((button) => {
+      button.addEventListener("click", function () {
+        const name = this.getAttribute("data-name");
+        const passport = this.getAttribute("data-passport");
+        const entryDate = this.getAttribute("data-entry");
+
+        // Gửi AJAX request để lưu vào DB
+        fetch("add_seaman.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `name=${encodeURIComponent(name)}&passport=${encodeURIComponent(
+            passport
+          )}&entry_date=${encodeURIComponent(
+            entryDate
+          )}&ship_name=${encodeURIComponent(shipname)}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert("Added crew successfully!");
+            } else {
+              alert(data.error);
+            }
+          })
+          .catch((error) => console.error("Lỗi:", error));
+      });
+    });
   }
 });
