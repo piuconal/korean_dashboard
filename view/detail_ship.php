@@ -99,11 +99,13 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
                 <th>형식</th>
                 <th>시작일</th>
                 <th>하선일</th>
-                <th> 선관비</th>
+                <th>선관비</th>
                 <th>이동비</th>
                 <th>미납금액</th>
                 <th>환불금액</th>
                 <th>청구</th>
+                <th>비교</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -116,11 +118,18 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
                         <td><?php echo htmlspecialchars($seaman['type']); ?></td>
                         <td><?php echo htmlspecialchars($seaman['start_date']); ?></td>
                         <td><?php echo htmlspecialchars($seaman['disembark_date']); ?></td>
-                        <td><?php echo number_format($seaman['ship_fee']); ?> VND</td>
-                        <td><?php echo number_format($seaman['moving_fee']); ?> VND</td>
-                        <td style="color: red;"><?php echo number_format($seaman['outstanding_amount']); ?> VND</td>
-                        <td style="color: green;"><?php echo number_format($seaman['refund_amount']); ?> VND</td>
-                        <td><?php echo htmlspecialchars($seaman['note']); ?></td>
+                        <td><?php echo number_format($seaman['ship_fee']); ?> </td>
+                        <td><?php echo number_format($seaman['moving_fee']); ?> </td>
+                        <td style="color: red;"><?php echo number_format($seaman['outstanding_amount']); ?> </td>
+                        <td style="color: green;"><?php echo number_format($seaman['refund_amount']); ?> </td>
+                        <td><?php echo number_format($seaman['request_status']); ?> </td>
+                        <td><?php echo htmlspecialchars($seaman['note']); ?>🧾</td>
+                        <td>
+                            <button style="font-size: 20px" class="btn btn-warning btn-sm editSeamanBtn" data-id="<?php echo $seaman['id']; ?>">
+                                <i class="fas fa-edit"></i> 수정
+                            </button>
+                        </td>
+
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>
