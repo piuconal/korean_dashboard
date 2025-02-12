@@ -65,5 +65,6 @@ if (!isset($_SESSION['user'])) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="../view/js/income_manage.js"></script>
 <script src="../view/js/listship.js"></script>
+<script src="../view/js/detail_ship.js"></script>
 </body>
 </html>
