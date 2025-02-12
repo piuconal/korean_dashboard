@@ -69,6 +69,10 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
         tbody tr:hover {
             background-color: #f1f1f1;
         }
+        
+        th, td{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -122,8 +126,23 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
                         <td><?php echo number_format($seaman['moving_fee']); ?> </td>
                         <td style="color: red;"><?php echo number_format($seaman['outstanding_amount']); ?> </td>
                         <td style="color: green;"><?php echo number_format($seaman['refund_amount']); ?> </td>
-                        <td><?php echo number_format($seaman['request_status']); ?> </td>
-                        <td><?php echo htmlspecialchars($seaman['note']); ?>🧾</td>
+                        <td>
+                            <img style="width: 40px; cursor: pointer;" 
+                                src="../img/mail<?php echo $seaman['request_status']; ?>.png" 
+                                alt="Status <?php echo $seaman['request_status']; ?>" 
+                                class="toggle-status" 
+                                data-id="<?php echo $seaman['id']; ?>" 
+                                data-status="<?php echo $seaman['request_status']; ?>">
+                        </td>
+
+
+                        <td>
+                            <img class="edit-note" style="width: 35px; cursor: pointer;" src="../img/note.png" 
+                                data-id="<?php echo $seaman['id']; ?>" 
+                                alt="Edit Note">
+                        </td>
+
+
                         <td>
                             <button style="font-size: 20px" class="btn btn-warning btn-sm editSeamanBtn" data-id="<?php echo $seaman['id']; ?>">
                                 <i class="fas fa-edit"></i> 수정
@@ -172,9 +191,37 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
   </div>
 </div>
 
+<!-- Toast thông báo -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+    <div id="statusToast" class="toast hide bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">Cập nhật trạng thái thành công!</div>
+    </div>
+</div>
+
+<!-- Modal nhập ghi chú -->
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Đổi từ modal-sm thành modal-lg -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="noteModalLabel">View & Edit Notes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="noteContent" class="form-control" rows="5" style="font-size: 1.4rem; padding: 10px;"></textarea>
+                <input type="hidden" id="seamanId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-lg" id="saveNoteBtn">Save</button> <!-- Nút to hơn -->
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="../view/js/list_seaman.js"></script>
+<script src="../view/js/update_mail.js"></script>
+<script src="../view/js/update_note.js"></script>
 
 </body>
 </html>
