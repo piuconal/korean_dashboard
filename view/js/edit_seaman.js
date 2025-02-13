@@ -34,9 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
       let seamanId = document.getElementById("editSeamanId").value;
       let type = document.getElementById("editSeamanType").value;
       let start_date = document.getElementById("editSeamanStartDate").value;
-      let disembark_date = document.getElementById(
-        "editSeamanDisembarkDate"
-      ).value;
+      let disembark_date =
+        document.getElementById("editSeamanDisembarkDate").value || ""; // Cho phép rỗng
       let moving_fee = document.getElementById("editSeamanMovingFee").value;
 
       let formData = new FormData();
@@ -54,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
           if (data.success) {
             showToast("Update successful!", "success");
-            setTimeout(() => location.reload(), 1000); // Reload after update
+            setTimeout(() => location.reload(), 1000);
           } else {
             showToast(`Update error: ${data.message}`, "danger");
           }

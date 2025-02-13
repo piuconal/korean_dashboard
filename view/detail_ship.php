@@ -129,7 +129,10 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
                         <td><?php echo htmlspecialchars($seaman['entry_date']); ?></td>
                         <td><?php echo htmlspecialchars($seaman['type']); ?></td>
                         <td><?php echo htmlspecialchars($seaman['start_date']); ?></td>
-                        <td><?php echo htmlspecialchars($seaman['disembark_date']); ?></td>
+                        <td>
+                            <?php echo ($seaman['disembark_date'] !== '0000-00-00') ? htmlspecialchars($seaman['disembark_date']) : ''; ?>
+                        </td>
+
                         <td>
                             <?php if (!empty($seaman['start_date'])) : ?>
                                 <?php echo date('Y', strtotime($seaman['start_date'])); ?>
@@ -153,7 +156,7 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
 
                         <td style="color: green;">
                             <?php
-                            if ($seaman['ship_fee'] == 0 && !empty($seaman['disembark_date']) && !empty($seaman['start_date'])) {
+                            if ($seaman['ship_fee'] == 0 && !empty($seaman['start_date']) && !empty($seaman['disembark_date']) && $seaman['disembark_date'] !== '0000-00-00') {
                                 $start_date = new DateTime($seaman['start_date']);
                                 $disembark_date = new DateTime($seaman['disembark_date']);
                                 $days = $disembark_date->diff($start_date)->days; // Số ngày chênh lệch
@@ -165,7 +168,6 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
                             }
                             ?>
                         </td>
-
 
                         <td>
                             <img style="width: 40px; cursor: pointer;" 
