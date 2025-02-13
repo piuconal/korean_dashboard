@@ -73,6 +73,14 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
         th, td{
             text-align: center;
         }
+        .shipFeeCheckbox, .moving-fee-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #28a745; /* Màu xanh lá cây */
+            transform: scale(1.2); /* Tăng kích thước */
+        }
+
     </style>
 </head>
 <body>
@@ -122,10 +130,43 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
                         <td><?php echo htmlspecialchars($seaman['type']); ?></td>
                         <td><?php echo htmlspecialchars($seaman['start_date']); ?></td>
                         <td><?php echo htmlspecialchars($seaman['disembark_date']); ?></td>
-                        <td><?php echo number_format($seaman['ship_fee']); ?> </td>
-                        <td><?php echo number_format($seaman['moving_fee']); ?> </td>
-                        <td style="color: red;"><?php echo number_format($seaman['outstanding_amount']); ?> </td>
-                        <td style="color: green;"><?php echo number_format($seaman['refund_amount']); ?> </td>
+                        <td>
+                            <?php if (!empty($seaman['start_date'])) : ?>
+                                <?php echo date('Y', strtotime($seaman['start_date'])); ?>
+                                <input type="checkbox" class="shipFeeCheckbox" data-id="<?php echo $seaman['id']; ?>"
+                                    <?php echo ($seaman['ship_fee'] == 0) ? 'checked' : ''; ?>>
+                            <?php endif; ?>
+                        </td>
+
+                        <td>
+                            <?php echo number_format($seaman['moving_fee']); ?>
+                            <?php if ($seaman['moving_fee'] != 0): ?>
+                                <input type="checkbox" class="moving-fee-checkbox" data-id="<?php echo $seaman['id']; ?>" data-fee="<?php echo $seaman['moving_fee']; ?>">
+                            <?php endif; ?>
+                        </td>
+
+
+                        <td class="outstanding-amount" style="color: red;" data-id="<?php echo $seaman['id']; ?>">
+                            <?php echo number_format($seaman['ship_fee'] + $seaman['moving_fee']); ?>
+                        </td>
+
+
+                        <td style="color: green;">
+                            <?php
+                            if ($seaman['ship_fee'] == 0 && !empty($seaman['disembark_date']) && !empty($seaman['start_date'])) {
+                                $start_date = new DateTime($seaman['start_date']);
+                                $disembark_date = new DateTime($seaman['disembark_date']);
+                                $days = $disembark_date->diff($start_date)->days; // Số ngày chênh lệch
+
+                                $refund_amount = 132000 - (132000 / 365 * $days);
+                                echo number_format($refund_amount);
+                            } else {
+                                echo "";
+                            }
+                            ?>
+                        </td>
+
+
                         <td>
                             <img style="width: 40px; cursor: pointer;" 
                                 src="../img/mail<?php echo $seaman['request_status']; ?>.png" 
@@ -217,11 +258,61 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
     </div>
 </div>
 
+<!-- Modal chỉnh sửa thuyền viên -->
+<div class="modal fade" id="editSeamanModal" tabindex="-1" aria-labelledby="editSeamanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Modal rộng hơn -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="editSeamanModalLabel">Edit Seaman Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editSeamanForm">
+                    <input type="hidden" id="editSeamanId">
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editSeamanType" class="form-label">형식</label>
+                            <select class="form-select" id="editSeamanType">
+                                <option value="신규">신규</option>
+                                <option value="근변">근변</option>
+                                <option value="재입국">재입국</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="editSeamanStartDate" class="form-label">시작일</label>
+                            <input type="date" class="form-control" id="editSeamanStartDate">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="editSeamanDisembarkDate" class="form-label">하선일</label>
+                            <input type="date" class="form-control" id="editSeamanDisembarkDate">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="editSeamanMovingFee" class="form-label">이동비</label>
+                            <input type="number" class="form-control" id="editSeamanMovingFee">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveEditSeaman">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="../view/js/list_seaman.js"></script>
 <script src="../view/js/update_mail.js"></script>
 <script src="../view/js/update_note.js"></script>
+<script src="../view/js/edit_seaman.js"></script>
+<script src="../view/js/ship_fee.js"></script>
+<script src="../view/js/out_amount.js"></script>
 
 </body>
 </html>

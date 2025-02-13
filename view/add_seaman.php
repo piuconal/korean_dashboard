@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo json_encode(["success" => false, "error" => "This crew member is already on the list."]);
             } else {
                 // Chèn dữ liệu mới vào bảng crew_members
-                $stmt = $conn->prepare("INSERT INTO crew_members (name, passport_number, entry_date, ship_id, type) VALUES (?, ?, ?, ?, '')");
+                $stmt = $conn->prepare("INSERT INTO crew_members (name, passport_number, entry_date, ship_id, type, ship_fee) VALUES (?, ?, ?, ?, '', 132000)");
                 $stmt->bind_param("sssi", $name, $passport, $entry_date, $ship_id);
                 
                 if ($stmt->execute()) {
