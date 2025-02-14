@@ -1,5 +1,6 @@
 <?php
 include '../db/connect.php';
+include 'log_seaman_changes.php'; // Import hàm logSeamanChanges
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'] ?? '';
@@ -21,7 +22,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Cập nhật cơ sở dữ liệu (cho phép `disembark_date` NULL nếu rỗng)
+    // Lấy dữ liệu hiện tại của seaman để so sánh
+    $stmt = $conn->prepare("SELECT * FROM crew_members WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $old_data = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if (!$old_data) {
+        echo json_encode(["success" => false, "message" => "Seaman not found"]);
+        exit;
+    }
+
+    // Chuẩn bị dữ liệu mới để cập nhật
+    $new_data = [
+        'type' => $type,
+        'start_date' => $start_date,
+        'disembark_date' => $disembark_date,
+        'moving_fee' => $moving_fee
+    ];
+
+    // Ghi log lịch sử thay đổi trước khi cập nhật
+    $updated_by = 'admin'; // Thay bằng user đăng nhập thực tế
+    logSeamanChanges($id, $updated_by, $old_data, $new_data);
+
+    // Cập nhật dữ liệu mới
     $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ? WHERE id = ?");
     $stmt->bind_param("sssii", $type, $start_date, $disembark_date, $moving_fee, $id);
 
@@ -30,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo json_encode(["success" => false, "message" => "Update failed"]);
     }
-}
 
+    $stmt->close();
+}
 ?>

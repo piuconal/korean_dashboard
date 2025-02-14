@@ -138,6 +138,9 @@ $conn->close();
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
+                    <a href="log.php" target="_blank" class="btn btn-info text-white">View Log</a>
+                </li>
+                <li class="nav-item ms-2">
                     <button class="btn btn-warning text-dark" onclick="openPopup()">Change password</button>
                 </li>
                 <li class="nav-item ms-2">

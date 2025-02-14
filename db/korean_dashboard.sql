@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2025 at 12:53 PM
+-- Generation Time: Feb 14, 2025 at 05:02 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,6 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `korean_dashboard`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `crew_history`
+--
+
+CREATE TABLE `crew_history` (
+  `id` int(11) NOT NULL,
+  `crew_id` int(11) NOT NULL,
+  `column_name` varchar(50) NOT NULL,
+  `old_value` text DEFAULT NULL,
+  `new_value` text DEFAULT NULL,
+  `updated_by` varchar(50) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -82,6 +98,13 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`) VALUES
 --
 
 --
+-- Indexes for table `crew_history`
+--
+ALTER TABLE `crew_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `crew_id` (`crew_id`);
+
+--
 -- Indexes for table `crew_members`
 --
 ALTER TABLE `crew_members`
@@ -108,16 +131,22 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `crew_history`
+--
+ALTER TABLE `crew_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT for table `crew_members`
 --
 ALTER TABLE `crew_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `ships`
 --
 ALTER TABLE `ships`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -128,6 +157,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `crew_history`
+--
+ALTER TABLE `crew_history`
+  ADD CONSTRAINT `crew_history_ibfk_1` FOREIGN KEY (`crew_id`) REFERENCES `crew_members` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `crew_members`
