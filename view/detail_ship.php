@@ -1,7 +1,6 @@
 <?php
 session_start();
 include '../db/connect.php';
-
 // Kiểm tra nếu chưa đăng nhập thì chuyển hướng về index.php
 if (!isset($_SESSION['user'])) {
     header("Location: index.php");
@@ -17,6 +16,15 @@ $stmt->bind_param("s", $ship_name);
 $stmt->execute();
 $result = $stmt->get_result();
 $seamen = $result->fetch_all(MYSQLI_ASSOC);
+
+// Lấy trạng thái outstanding_status của tàu
+$stmt = $conn->prepare("SELECT outstanding_status FROM ships WHERE name = ?");
+$stmt->bind_param("s", $ship_name);
+$stmt->execute();
+$stmt->bind_result($outstanding_status);
+$stmt->fetch();
+$stmt->close();
+
 ?>
 
 <!DOCTYPE html>
@@ -88,9 +96,17 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><?php echo htmlspecialchars($ship_name); ?></a>
+        <a class="navbar-brand" href="#">
+            <?php echo htmlspecialchars($ship_name); ?>
+            <?php if (isset($outstanding_status) && $outstanding_status == 1): ?>
+                <span>❗</span>
+            <?php else: ?>
+                <span></span>
+            <?php endif; ?>
+        </a>
     </div>
 </nav>
+
 
 <div class="container-fluid mt-4">
     <!-- Nút thêm thuyền viên -->
@@ -143,16 +159,15 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
 
                         <td>
                             <?php echo number_format($seaman['moving_fee']); ?>
-                            <?php if ($seaman['moving_fee'] != 0): ?>
-                                <input type="checkbox" class="moving-fee-checkbox" data-id="<?php echo $seaman['id']; ?>" data-fee="<?php echo $seaman['moving_fee']; ?>">
+                            <?php if ($seaman['moving_fee'] != 0 || $seaman['moving_fee'] === 0): ?>
+                                <input type="checkbox" class="moving-fee-checkbox" data-id="<?php echo $seaman['id']; ?>" data-fee="<?php echo $seaman['moving_fee']; ?>"
+                                    <?php echo ($seaman['moving_fee'] == 0) ? 'checked' : ''; ?>>
                             <?php endif; ?>
                         </td>
 
-
                         <td class="outstanding-amount" style="color: red;" data-id="<?php echo $seaman['id']; ?>">
-                            <?php echo number_format($seaman['ship_fee'] + $seaman['moving_fee']); ?>
+                            <?php echo number_format($seaman['outstanding_amount']); ?>
                         </td>
-
 
                         <td style="color: green;">
                             <?php
@@ -178,13 +193,11 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
                                 data-status="<?php echo $seaman['request_status']; ?>">
                         </td>
 
-
                         <td>
                             <img class="edit-note" style="width: 35px; cursor: pointer;" src="../img/note.png" 
                                 data-id="<?php echo $seaman['id']; ?>" 
                                 alt="Edit Note">
                         </td>
-
 
                         <td>
                             <button style="font-size: 20px" class="btn btn-warning btn-sm editSeamanBtn" data-id="<?php echo $seaman['id']; ?>">
@@ -315,6 +328,7 @@ $seamen = $result->fetch_all(MYSQLI_ASSOC);
 <script src="../view/js/edit_seaman.js"></script>
 <script src="../view/js/ship_fee.js"></script>
 <script src="../view/js/out_amount.js"></script>
+<script src="../view/js/moving_fee.js"></script>
 
 </body>
 </html>

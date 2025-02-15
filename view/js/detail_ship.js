@@ -3,7 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("shipList")
     .addEventListener("click", function (event) {
       if (event.target.classList.contains("ship-box")) {
-        const shipName = event.target.textContent.trim();
+        let shipName = event.target.textContent.replace(/❗/g, "").trim();
+
+        // Xóa tất cả khoảng trắng thừa giữa các từ (nếu có)
+        shipName = shipName.replace(/\s+/g, " ");
 
         // Gửi request kiểm tra và thêm tàu vào DB
         fetch("add_ship.php", {

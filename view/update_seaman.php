@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Lấy dữ liệu hiện tại của seaman để so sánh
-    $stmt = $conn->prepare("SELECT * FROM crew_members WHERE id = ?");
+    $stmt = $conn->prepare("SELECT ship_fee, moving_fee FROM crew_members WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $old_data = $stmt->get_result()->fetch_assoc();
@@ -34,24 +34,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Chuẩn bị dữ liệu mới để cập nhật
-    $new_data = [
-        'type' => $type,
-        'start_date' => $start_date,
-        'disembark_date' => $disembark_date,
-        'moving_fee' => $moving_fee
-    ];
+    $old_moving_fee = $old_data['moving_fee'];
+    $ship_fee = $old_data['ship_fee'];
+
+    // Tính toán outstanding_amount mới
+    $outstanding_amount = $ship_fee + $moving_fee;
 
     // Ghi log lịch sử thay đổi trước khi cập nhật
     $updated_by = 'admin'; // Thay bằng user đăng nhập thực tế
+    $new_data = ['moving_fee' => $moving_fee, 'outstanding_amount' => $outstanding_amount];
     logSeamanChanges($id, $updated_by, $old_data, $new_data);
 
-    // Cập nhật dữ liệu mới
-    $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ? WHERE id = ?");
-    $stmt->bind_param("sssii", $type, $start_date, $disembark_date, $moving_fee, $id);
+    // Cập nhật dữ liệu mới + outstanding_amount
+    $stmt = $conn->prepare("
+        UPDATE crew_members 
+        SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ?, outstanding_amount = ? 
+        WHERE id = ?
+    ");
+    $stmt->bind_param("sssiii", $type, $start_date, $disembark_date, $moving_fee, $outstanding_amount, $id);
 
     if ($stmt->execute()) {
-        echo json_encode(["success" => true]);
+        echo json_encode(["success" => true, "outstanding_amount" => $outstanding_amount]);
     } else {
         echo json_encode(["success" => false, "message" => "Update failed"]);
     }
