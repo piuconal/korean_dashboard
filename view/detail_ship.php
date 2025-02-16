@@ -111,7 +111,9 @@ $stmt->close();
 <div class="container-fluid mt-4">
     <!-- Nút thêm thuyền viên -->
     <div class="d-flex justify-content-between align-items-center">
-        <h3>List Seaman</h3>
+        <h3>
+            <span class="text-danger" id="totalPendingAmount" style="font-size: 30px;"></span>
+        </h3>
         <button class="btn btn-add" id="addSeamanBtn">
             <i class="fas fa-user-plus"></i> Add Seaman
         </button>
@@ -329,6 +331,8 @@ $stmt->close();
 <script src="../view/js/ship_fee.js"></script>
 <script src="../view/js/out_amount.js"></script>
 <script src="../view/js/moving_fee.js"></script>
+<script src="../view/js/total_debt.js"></script>
+<script src="../view/js/sort_colsix.js"></script>
 
 </body>
 </html>
