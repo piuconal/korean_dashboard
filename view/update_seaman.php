@@ -49,13 +49,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Cập nhật dữ liệu mới
     $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ? WHERE id = ?");
     $stmt->bind_param("sssii", $type, $start_date, $disembark_date, $moving_fee, $id);
-
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true]);
-    } else {
-        echo json_encode(["success" => false, "message" => "Update failed"]);
-    }
-
+    $stmt->execute();
     $stmt->close();
+
+    // Cập nhật outstanding_amount
+    $stmt = $conn->prepare("UPDATE crew_members SET outstanding_amount = ship_fee + moving_fee WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->close();
+
+    // Load lại trang cập nhật outstanding_amount
+    $update_url = "http://$servername/korean_dashboard/view/update_outstanding.php";
+    file_get_contents($update_url);
+
+    echo json_encode(["success" => true]);
 }
 ?>

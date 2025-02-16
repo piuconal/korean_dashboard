@@ -55,7 +55,7 @@ CREATE TABLE `crew_members` (
   `ship_fee` int(11) DEFAULT 0,
   `moving_fee` int(11) DEFAULT 0,
   `outstanding_amount` int(11) DEFAULT 0,
-  `refund_amount` int(11) DEFAULT 0,
+  `refund_amount` int(11) DEFAULT 1,
   `request_status` tinyint(1) DEFAULT 0,
   `note` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),

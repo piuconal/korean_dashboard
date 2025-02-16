@@ -81,7 +81,7 @@ $stmt->close();
         th, td{
             text-align: center;
         }
-        .shipFeeCheckbox, .moving-fee-checkbox {
+        .shipFeeCheckbox, .moving-fee-checkbox, .refund-checkbox {
             width: 20px;
             height: 20px;
             cursor: pointer;
@@ -112,7 +112,7 @@ $stmt->close();
     <!-- Nút thêm thuyền viên -->
     <div class="d-flex justify-content-between align-items-center">
         <h3>
-            <span class="text-danger" id="totalPendingAmount" style="font-size: 30px;"></span>
+            <span id="totalPendingAmount" style="font-size: 30px;"></span>
         </h3>
         <button class="btn btn-add" id="addSeamanBtn">
             <i class="fas fa-user-plus"></i> Add Seaman
@@ -173,6 +173,7 @@ $stmt->close();
 
                         <td style="color: green;">
                             <?php
+                            $refund_amount = 0;
                             if ($seaman['ship_fee'] == 0 && !empty($seaman['start_date']) && !empty($seaman['disembark_date']) && $seaman['disembark_date'] !== '0000-00-00') {
                                 $start_date = new DateTime($seaman['start_date']);
                                 $disembark_date = new DateTime($seaman['disembark_date']);
@@ -180,10 +181,13 @@ $stmt->close();
 
                                 $refund_amount = 132000 - (132000 / 365 * $days);
                                 echo number_format($refund_amount);
-                            } else {
-                                echo "";
                             }
                             ?>
+                            <?php if (!empty($seaman['disembark_date']) && $seaman['disembark_date'] !== '0000-00-00'): ?>
+                                <input type="checkbox" class="refund-checkbox" data-id="<?= $seaman['id'] ?>" <?= ($seaman['refund_amount'] == 0) ? 'checked' : '' ?>>
+                            <?php endif; ?>
+                        </td>
+
                         </td>
 
                         <td>
@@ -333,6 +337,7 @@ $stmt->close();
 <script src="../view/js/moving_fee.js"></script>
 <script src="../view/js/total_debt.js"></script>
 <script src="../view/js/sort_colsix.js"></script>
+<script src="../view/js/update_refund.js"></script>
 
 </body>
 </html>

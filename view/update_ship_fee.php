@@ -33,6 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("i", $id);
     $stmt->execute();
 
+    $update_url = "http://$servername/korean_dashboard/view/update_outstanding.php";
+    file_get_contents($update_url);
+
     echo json_encode(["success" => true, "updated_note" => $ship_fee == 0 ? $note : "Không thay đổi"]);
 }
 ?>
