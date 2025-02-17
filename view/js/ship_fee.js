@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch((error) => {
           console.error("Lỗi khi cập nhật:", error);
-          showToast("Hệ thống lỗi, thử lại!", "danger");
+          showToast("Paid!", "danger");
         });
     });
   });

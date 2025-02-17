@@ -35,6 +35,10 @@ $stmt->close();
     <title><?php echo htmlspecialchars($ship_name); ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Add this to the head section of your HTML file -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .navbar-brand {
             font-size: 1.8rem;
@@ -153,9 +157,19 @@ $stmt->close();
 
                         <td>
                             <?php if (!empty($seaman['start_date'])) : ?>
-                                <?php echo date('Y', strtotime($seaman['start_date'])); ?>
-                                <input type="checkbox" class="shipFeeCheckbox" data-id="<?php echo $seaman['id']; ?>"
-                                    <?php echo ($seaman['ship_fee'] == 0) ? 'checked' : ''; ?>>
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <!-- Year Text -->
+                                    <span class="mr-3"><?php echo $seaman['year']; ?></span>
+                                    
+                                    <!-- "+" Button -->
+                                    <button type="button" class="btn btn-sm btn-outline-primary updateYearBtn" data-id="<?php echo $seaman['id']; ?>">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    
+                                    <!-- Checkbox -->
+                                    <input type="checkbox" class="shipFeeCheckbox ml-3" data-id="<?php echo $seaman['id']; ?>"
+                                        <?php echo ($seaman['ship_fee'] == 0) ? 'checked' : ''; ?>>
+                                </div>
                             <?php endif; ?>
                         </td>
 
@@ -338,6 +352,7 @@ $stmt->close();
 <script src="../view/js/total_debt.js"></script>
 <script src="../view/js/sort_colsix.js"></script>
 <script src="../view/js/update_refund.js"></script>
+<script src="../view/js/update_year.js"></script>
 
 </body>
 </html>

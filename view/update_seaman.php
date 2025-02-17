@@ -46,9 +46,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $updated_by = 'admin'; // Thay bằng user đăng nhập thực tế
     logSeamanChanges($id, $updated_by, $old_data, $new_data);
 
-    // Cập nhật dữ liệu mới
-    $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ? WHERE id = ?");
-    $stmt->bind_param("sssii", $type, $start_date, $disembark_date, $moving_fee, $id);
+    // Lấy năm từ start_date
+    $year = date('Y', strtotime($start_date));
+
+    // Cập nhật dữ liệu mới và trường year
+    $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ?, year = ? WHERE id = ?");
+    $stmt->bind_param("sssiii", $type, $start_date, $disembark_date, $moving_fee, $year, $id);
     $stmt->execute();
     $stmt->close();
 
