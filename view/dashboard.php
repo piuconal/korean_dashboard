@@ -210,4 +210,5 @@ $conn->close();
     };
 </script>
 <script src="../view/js/dashboard.js"></script>
+<script src="../view/js/add_areas.js"></script>
 </html>

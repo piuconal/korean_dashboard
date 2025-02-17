@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2025 at 03:07 AM
+-- Generation Time: Feb 17, 2025 at 05:51 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,6 +20,18 @@ SET time_zone = "+00:00";
 --
 -- Database: `korean_dashboard`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `area`
+--
+
+CREATE TABLE `area` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `status` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -72,7 +84,8 @@ CREATE TABLE `crew_members` (
 CREATE TABLE `ships` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `outstanding_status` tinyint(1) DEFAULT 0
+  `outstanding_status` tinyint(1) DEFAULT 0,
+  `area_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -100,6 +113,13 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`) VALUES
 --
 
 --
+-- Indexes for table `area`
+--
+ALTER TABLE `area`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- Indexes for table `crew_history`
 --
 ALTER TABLE `crew_history`
@@ -119,7 +139,8 @@ ALTER TABLE `crew_members`
 --
 ALTER TABLE `ships`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`);
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `ships_area_fk` (`area_id`);
 
 --
 -- Indexes for table `users`
@@ -133,6 +154,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `area`
+--
+ALTER TABLE `area`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `crew_history`
 --
 ALTER TABLE `crew_history`
@@ -142,13 +169,13 @@ ALTER TABLE `crew_history`
 -- AUTO_INCREMENT for table `crew_members`
 --
 ALTER TABLE `crew_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `ships`
 --
 ALTER TABLE `ships`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -171,6 +198,12 @@ ALTER TABLE `crew_history`
 --
 ALTER TABLE `crew_members`
   ADD CONSTRAINT `crew_members_ibfk_1` FOREIGN KEY (`ship_id`) REFERENCES `ships` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `ships`
+--
+ALTER TABLE `ships`
+  ADD CONSTRAINT `ships_area_fk` FOREIGN KEY (`area_id`) REFERENCES `area` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
