@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Nếu ship_fee = 0 và có start_date, kiểm tra và cập nhật note
+    $new_note = "";
     if ($ship_fee == 0 && !empty($start_date)) {
         // Lấy giá trị cũ của note
         $stmt = $conn->prepare("SELECT note FROM crew_members WHERE id = ?");
@@ -31,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $current_note = $row['note'] ?? '';
 
         // Kiểm tra nếu chuỗi "start_date paid" đã có trong note chưa
-        $note_to_add = "$start_date paid";
+        $note_to_add = "$start_date paid, ";
         if (strpos($current_note, $note_to_add) === false) {
             // Nếu chưa có, nối thêm vào cuối note
             $new_note = $current_note . " " . $note_to_add;
@@ -39,6 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Cập nhật lại note trong cơ sở dữ liệu
             $stmt = $conn->prepare("UPDATE crew_members SET note = ? WHERE id = ?");
             $stmt->bind_param("si", $new_note, $id);
+            $stmt->execute();
+
+            // Lưu lịch sử thay đổi vào bảng crew_history
+            $updated_by = 'admin'; // Thay thế bằng tên người dùng hiện tại (có thể lấy từ session)
+            $column_name = 'note';  // Cột đang cập nhật là 'note'
+            $old_value = $current_note;  // Giá trị cũ của 'note'
+            $new_value = $new_note;  // Giá trị mới của 'note'
+
+            $stmt = $conn->prepare("INSERT INTO crew_history (crew_id, column_name, old_value, new_value, updated_by) 
+                                    VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("issss", $id, $column_name, $old_value, $new_value, $updated_by);
             $stmt->execute();
         }
     }
@@ -48,29 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("i", $id);
     $stmt->execute();
 
-    // Cập nhật thông tin vào file JSON
-    $file = '../data/crew_members.json'; // Đường dẫn đến file JSON
-
-    if (file_exists($file)) {
-        $jsonData = json_decode(file_get_contents($file), true); // Đọc dữ liệu JSON vào mảng
-
-        // Tìm và cập nhật đối tượng trong mảng theo id
-        foreach ($jsonData as &$crewMember) {
-            if ($crewMember['id'] == $id) {
-                // Cập nhật lại note trong file JSON
-                $crewMember['note'] = $new_note ?? $current_note;
-                break;
-            }
-        }
-
-        // Ghi lại dữ liệu JSON vào file
-        file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
-
-    } else {
-        echo json_encode(["success" => false, "message" => "File JSON không tồn tại"]);
-        exit();
-    }
-
+    // Cập nhật dữ liệu vào hệ thống, không cần ghi vào file JSON nữa
     $update_url = "http://$servername/korean_dashboard/view/update_outstanding.php";
     file_get_contents($update_url);
 

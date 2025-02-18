@@ -7,9 +7,6 @@ include '../db/connect.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Kiểm tra JSON đầu vào
-file_put_contents("debug.txt", print_r($data, true));
-
 if (!isset($data['areas']) || !is_array($data['areas'])) {
     echo json_encode(["success" => false, "error" => "Dữ liệu không hợp lệ"]);
     exit();
