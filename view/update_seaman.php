@@ -41,7 +41,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'disembark_date' => $disembark_date,
         'moving_fee' => $moving_fee
     ];
+    // Kiểm tra có thay đổi không
+    $has_changes = false;
+    foreach ($new_data as $key => $value) {
+        if ($old_data[$key] != $value) {
+            $has_changes = true;
+            break;
+        }
+    }
 
+    // Nếu có thay đổi, ghi lại vào JSON
+    if ($has_changes) {
+        logSeamanChangesFull($old_data, $new_data);
+    }
     // Ghi log lịch sử thay đổi trước khi cập nhật
     $updated_by = 'admin'; // Thay bằng user đăng nhập thực tế
     logSeamanChanges($id, $updated_by, $old_data, $new_data);
@@ -66,5 +78,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     file_get_contents($update_url);
 
     echo json_encode(["success" => true]);
+}
+
+// Hàm ghi log dữ liệu mới vào JSON, đánh dấu thay đổi với '*'
+function logSeamanChangesFull($old_data, $new_data) {
+    $logFile = '../logs/seaman_changes.json';
+
+    // Tạo bản ghi log mới
+    $logEntry = [
+        'id' => $old_data['id'],
+        'timestamp' => date('Y-m-d H:i:s'),
+        'updated_row' => []
+    ];
+
+    // So sánh dữ liệu và thêm '*' vào cột thay đổi
+    foreach ($old_data as $key => $value) {
+        if (isset($new_data[$key]) && $new_data[$key] != $value) {
+            $logEntry['updated_row'][$key] = '*' . $new_data[$key];
+        } else {
+            $logEntry['updated_row'][$key] = $value;
+        }
+    }
+
+    // Đọc file JSON hiện có
+    $logs = [];
+    if (file_exists($logFile)) {
+        $logs = json_decode(file_get_contents($logFile), true) ?? [];
+    }
+
+    // Thêm log mới
+    $logs[] = $logEntry;
+
+    // Ghi lại file JSON
+    file_put_contents($logFile, json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 }
 ?>

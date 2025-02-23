@@ -139,3 +139,8 @@ h5#modalTitle {
   height: 40px;
   border: 1px solid blue;
 }
+
+.modal-body {
+  max-height: 80vh; /* Giới hạn chiều cao tối đa là 70% chiều cao của viewport */
+  overflow-y: auto; /* Bật thanh cuộn */
+}

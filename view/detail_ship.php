@@ -92,6 +92,11 @@ $stmt->close();
             accent-color: #28a745; /* Màu xanh lá cây */
             transform: scale(1.2); /* Tăng kích thước */
         }
+        
+        .modal-body {
+            max-height: 80vh; /* Giới hạn chiều cao tối đa là 70% chiều cao của viewport */
+            overflow-y: auto; /* Bật thanh cuộn */
+        }
 
     </style>
 </head>
