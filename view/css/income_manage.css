@@ -144,3 +144,25 @@ h5#modalTitle {
   max-height: 80vh; /* Giới hạn chiều cao tối đa là 70% chiều cao của viewport */
   overflow-y: auto; /* Bật thanh cuộn */
 }
+#shipCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 36px;
+  border-radius: 50px; /* Bo góc hình viên thuốc */
+  background: linear-gradient(45deg, #4e93cf, #0f68b6);
+  color: white;
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+#shipCount::before {
+  content: "SUM: ";
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+#shipCount:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}

@@ -55,3 +55,29 @@ document.getElementById("searchInput").addEventListener("input", function () {
     item.style.display = text.includes(input) ? "" : "none";
   });
 });
+
+// Function để đếm và cập nhật số lượng ship-box
+function updateShipCount() {
+  const shipList = document.getElementById("shipList");
+  const shipCount = document.getElementById("shipCount");
+  const count = shipList.getElementsByClassName("ship-box").length;
+  shipCount.textContent = count;
+}
+
+// Tạo MutationObserver để theo dõi thay đổi trong shipList
+const observer = new MutationObserver((mutations) => {
+  updateShipCount();
+});
+
+// Cấu hình observer để theo dõi thay đổi trong cây DOM
+const config = {
+  childList: true, // Theo dõi thêm/xóa phần tử con
+  subtree: true, // Theo dõi toàn bộ cây con
+};
+
+// Bắt đầu quan sát shipList
+const shipList = document.getElementById("shipList");
+observer.observe(shipList, config);
+
+// Cập nhật ban đầu khi trang được tải
+updateShipCount();

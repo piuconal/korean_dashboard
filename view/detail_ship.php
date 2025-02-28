@@ -145,6 +145,7 @@ $stmt->close();
                 <th>청구</th>
                 <th>비교</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -227,6 +228,13 @@ $stmt->close();
                         <td>
                             <button style="font-size: 20px" class="btn btn-warning btn-sm editSeamanBtn" data-id="<?php echo $seaman['id']; ?>">
                                 <i class="fas fa-edit"></i> 수정
+                            </button>
+                        </td>
+
+                        <!-- Cột xóa mới -->
+                        <td>
+                            <button style="font-size: 20px" class="btn btn-danger btn-sm deleteSeamanBtn" data-id="<?php echo $seaman['id']; ?>">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </td>
 
@@ -358,6 +366,7 @@ $stmt->close();
 <script src="../view/js/sort_colsix.js"></script>
 <script src="../view/js/update_refund.js"></script>
 <script src="../view/js/update_year.js"></script>
+<script src="../view/js/delete_seaman.js"></script>
 
 </body>
 </html>

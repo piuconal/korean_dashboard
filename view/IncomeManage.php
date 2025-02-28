@@ -49,6 +49,7 @@ if (!isset($_SESSION['user'])) {
                 <div id="modalTitleContainer" class="modal-title-container">
                     <h5 id="modalTitle" class="modal-title">Thông tin khu vực</h5>
                 </div>
+                <span id="shipCount" class="badge bg-secondary ms-2">0</span>
                 <input type="text" id="searchShip" class="form-control ms-3" placeholder="Search..." style="max-width: 240px;">
             </div>
             <div class="modal-body">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2025 at 05:51 AM
+-- Generation Time: Feb 28, 2025 at 02:18 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -131,7 +131,6 @@ ALTER TABLE `crew_history`
 --
 ALTER TABLE `crew_members`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `passport_number` (`passport_number`),
   ADD KEY `ship_id` (`ship_id`);
 
 --
@@ -157,25 +156,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `area`
 --
 ALTER TABLE `area`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1485;
 
 --
 -- AUTO_INCREMENT for table `crew_history`
 --
 ALTER TABLE `crew_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `crew_members`
 --
 ALTER TABLE `crew_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `ships`
 --
 ALTER TABLE `ships`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `users`
