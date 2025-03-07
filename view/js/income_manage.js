@@ -2,6 +2,8 @@ async function loadAreas() {
   try {
     const response = await fetch("get_areas.php"); // API lấy danh sách khu vực
     const areas = await response.json();
+
+    console.log(areas); // ✅ Kiểm tra dữ liệu có status không
     displayAreas(areas);
   } catch (error) {
     console.error("Lỗi khi tải danh sách khu vực:", error);
@@ -16,7 +18,17 @@ function displayAreas(areas) {
   areas.forEach((area) => {
     const box = document.createElement("div");
     box.classList.add("box");
-    box.textContent = area.name;
+
+    // Kiểm tra giá trị status
+    console.log(`Khu vực: ${area.name}, Status: ${area.status}`);
+
+    let displayName = area.name;
+    if (parseInt(area.status) === 1) {
+      // Chuyển status về số để đảm bảo so sánh đúng
+      displayName += "❗";
+    }
+
+    box.textContent = displayName;
     box.dataset.areaId = area.id;
 
     box.addEventListener("click", () => loadShips(area.id, area.name));

@@ -148,7 +148,7 @@ $stmt->close();
         <h3>
             <span id="totalPendingAmount" style="font-size: 30px;"></span>
         </h3>
-        <div style="font-size: 30px;" class="d-flex align-items-center">
+        <div style="font-size: 30px; margin-top: -8px;" class="d-flex align-items-center">
             <label for="registrationFee" class="me-2">Tiền đăng ký:</label>
             <input type="number" id="registrationFee" class="form-control me-2" 
                 value="<?php echo htmlspecialchars($registration_fee); ?>" 

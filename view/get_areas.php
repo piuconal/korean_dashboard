@@ -1,7 +1,7 @@
 <?php
 include '../db/connect.php';
 
-$query = "SELECT id, name FROM area";
+$query = "SELECT id, name, status FROM area";
 $result = mysqli_query($conn, $query);
 
 $areas = [];

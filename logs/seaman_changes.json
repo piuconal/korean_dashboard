@@ -113,5 +113,51 @@
             "updated_at": "2025-03-07 09:01:33",
             "year": null
         }
+    },
+    {
+        "id": 62,
+        "timestamp": "2025-03-07 03:47:41",
+        "updated_row": {
+            "id": 62,
+            "ship_id": 2242,
+            "name": "NGUYEN QUOC HIEU",
+            "passport_number": "B6134369",
+            "entry_date": "2018-07-03",
+            "type": "*근변",
+            "start_date": "*2012-12-12",
+            "disembark_date": null,
+            "ship_fee": 132000,
+            "moving_fee": "*0123",
+            "outstanding_amount": 0,
+            "refund_amount": 1,
+            "request_status": 0,
+            "note": null,
+            "created_at": "2025-03-07 09:47:30",
+            "updated_at": "2025-03-07 09:47:30",
+            "year": null
+        }
+    },
+    {
+        "id": 63,
+        "timestamp": "2025-03-07 03:52:16",
+        "updated_row": {
+            "id": 63,
+            "ship_id": 2316,
+            "name": "NGUYEN QUOC HIEU",
+            "passport_number": "B6134369",
+            "entry_date": "2018-07-03",
+            "type": "*신규",
+            "start_date": "*2012-02-11",
+            "disembark_date": null,
+            "ship_fee": 132000,
+            "moving_fee": "*123",
+            "outstanding_amount": 0,
+            "refund_amount": 1,
+            "request_status": 0,
+            "note": null,
+            "created_at": "2025-03-07 09:52:06",
+            "updated_at": "2025-03-07 09:52:06",
+            "year": null
+        }
     }
 ]
