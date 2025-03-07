@@ -67,5 +67,51 @@
             "updated_at": "2025-03-06 18:59:17",
             "year": 2012
         }
+    },
+    {
+        "id": 59,
+        "timestamp": "2025-03-07 02:00:14",
+        "updated_row": {
+            "id": 59,
+            "ship_id": 2705,
+            "name": "NGUYEN VAN HAI333",
+            "passport_number": "C0421692",
+            "entry_date": "2021-04-13",
+            "type": "*신규",
+            "start_date": "*2012-11-11",
+            "disembark_date": null,
+            "ship_fee": 132000,
+            "moving_fee": "*123",
+            "outstanding_amount": 0,
+            "refund_amount": 1,
+            "request_status": 0,
+            "note": null,
+            "created_at": "2025-03-07 08:00:00",
+            "updated_at": "2025-03-07 08:00:00",
+            "year": null
+        }
+    },
+    {
+        "id": 61,
+        "timestamp": "2025-03-07 03:01:45",
+        "updated_row": {
+            "id": 61,
+            "ship_id": 2705,
+            "name": "NGUYEN VAN HAI",
+            "passport_number": "C0421692",
+            "entry_date": "2021-04-13",
+            "type": "*신규",
+            "start_date": "*2012-11-11",
+            "disembark_date": null,
+            "ship_fee": 132000,
+            "moving_fee": "*1243",
+            "outstanding_amount": 0,
+            "refund_amount": 1,
+            "request_status": 0,
+            "note": null,
+            "created_at": "2025-03-07 09:01:33",
+            "updated_at": "2025-03-07 09:01:33",
+            "year": null
+        }
     }
 ]

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../db/connect.php';
+
 // Kiểm tra nếu chưa đăng nhập thì chuyển hướng về index.php
 if (!isset($_SESSION['user'])) {
     header("Location: index.php");
@@ -8,24 +9,48 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Lấy tên tàu từ URL
-$ship_name = isset($_GET['ship_name']) ? urldecode($_GET['ship_name']) : "Không xác định";
+$ship_name = isset($_GET['ship_name']) ? urldecode($_GET['ship_name']) : '';
 
-// Truy vấn danh sách thuyền viên của tàu này
-$stmt = $conn->prepare("SELECT * FROM crew_members WHERE ship_id = (SELECT id FROM ships WHERE name = ? LIMIT 1)");
+if (empty($ship_name)) {
+    die("Lỗi: Không xác định được tên tàu.");
+}
+
+// Truy vấn lấy thông tin tàu, bao gồm registration_fee
+$query = "SELECT id, ship_code, registration_fee, registration_fee_status, outstanding_status FROM ships WHERE name = ? LIMIT 1";
+$stmt = $conn->prepare($query);
+
+if (!$stmt) {
+    die("Lỗi truy vấn: " . $conn->error);
+}
+
 $stmt->bind_param("s", $ship_name);
 $stmt->execute();
-$result = $stmt->get_result();
-$seamen = $result->fetch_all(MYSQLI_ASSOC);
-
-// Lấy trạng thái outstanding_status của tàu
-$stmt = $conn->prepare("SELECT outstanding_status FROM ships WHERE name = ?");
-$stmt->bind_param("s", $ship_name);
-$stmt->execute();
-$stmt->bind_result($outstanding_status);
+$stmt->bind_result($ship_id, $ship_code, $registration_fee, $status, $outstanding_status);
 $stmt->fetch();
 $stmt->close();
 
+// Kiểm tra nếu không tìm thấy tàu
+if (!$ship_id) {
+    die("Lỗi: Không tìm thấy thông tin tàu.");
+}
+
+// Truy vấn danh sách thuyền viên của tàu này
+$query = "SELECT * FROM crew_members WHERE ship_id = ?";
+$stmt = $conn->prepare($query);
+
+if (!$stmt) {
+    die("Lỗi truy vấn lấy danh sách thuyền viên: " . $conn->error);
+}
+
+$stmt->bind_param("i", $ship_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$seamen = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -118,12 +143,23 @@ $stmt->close();
 
 
 <div class="container-fluid mt-4">
-    <!-- Nút thêm thuyền viên -->
+    <!-- Tiền đăng ký + Checkbox -->
     <div class="d-flex justify-content-between align-items-center">
         <h3>
             <span id="totalPendingAmount" style="font-size: 30px;"></span>
         </h3>
-        <button class="btn btn-add" id="addSeamanBtn">
+        <div style="font-size: 30px;" class="d-flex align-items-center">
+            <label for="registrationFee" class="me-2">Tiền đăng ký:</label>
+            <input type="number" id="registrationFee" class="form-control me-2" 
+                value="<?php echo htmlspecialchars($registration_fee); ?>" 
+                style="width: 160px; font-size: 30px;">
+
+            <input type="checkbox" id="confirmFee" class="form-check-input" 
+                style="width: 30px; height: 30px;" 
+                data-ship-code="<?php echo htmlspecialchars($ship_code); ?>" 
+                <?php echo ($status == 1) ? "checked" : ""; ?>>
+        </div>
+        <button class="btn btn-add ms-3" id="addSeamanBtn">
             <i class="fas fa-user-plus"></i> Add Seaman
         </button>
     </div>
@@ -254,7 +290,7 @@ $stmt->close();
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addSeamanLabel">List from Excel</h5>
+        <h5 class="modal-title" id="addSeamanLabel">Danh sách thuyền viên</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -367,6 +403,7 @@ $stmt->close();
 <script src="../view/js/update_refund.js"></script>
 <script src="../view/js/update_year.js"></script>
 <script src="../view/js/delete_seaman.js"></script>
+<script src="../view/js/update_registration_fee.js"></script>
 
 </body>
 </html>

@@ -6,33 +6,29 @@ document.addEventListener("DOMContentLoaded", function () {
     addSeamanBtn.addEventListener("click", function () {
       const modal = new bootstrap.Modal(modalElement);
       modal.show();
-      loadExcel(); // Gọi hàm tải dữ liệu khi mở modal
+      loadSeamanFromDB(); // Gọi API lấy dữ liệu từ database khi mở modal
     });
   } else {
     console.error("Không tìm thấy nút hoặc modal!");
   }
 
-  async function loadExcel() {
+  async function loadSeamanFromDB() {
     try {
-      const response = await fetch("../excel/mydata.xlsx");
-      const data = await response.arrayBuffer();
-      const workbook = XLSX.read(data, { type: "array" });
+      const response = await fetch("get_crew_members.php");
+      const data = await response.json();
 
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-      displaySeamanData(jsonData);
+      displaySeamanData(data);
     } catch (error) {
-      console.error("Lỗi khi tải file Excel:", error);
+      console.error("Lỗi khi tải dữ liệu thuyền viên:", error);
     }
   }
+
   function setupSearch() {
     const searchInput = document.getElementById("searchSeaman");
 
     searchInput.addEventListener("input", function () {
       const searchValue = this.value.toLowerCase();
-      const rows = document.querySelectorAll(".seaman-row"); // ✅ Đúng selector
+      const rows = document.querySelectorAll(".seaman-row");
 
       rows.forEach((row) => {
         row.style.display = row.textContent.toLowerCase().includes(searchValue)
@@ -46,38 +42,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById("seamanList");
     tableBody.innerHTML = ""; // Xóa dữ liệu cũ
 
-    if (data.length <= 1) {
-      tableBody.innerHTML = `<tr><td colspan="4" class="text-center">Không có dữ liệu thuyền viên.</td></tr>`;
-      return;
-    }
-
-    // ⚡ Chỉ giữ lại dòng có "고용상태" CHÍNH XÁC là "근무" hoặc "하선(고용중단)"
-    const filteredData = data.slice(1).filter((row) => {
-      const status = (row[5] || "").trim(); // Cột "고용상태" (cột 6, index 5)
-      return status === "근무" || status === "하선(고용중단)";
-    });
-
-    if (filteredData.length === 0) {
+    if (data.length === 0) {
       tableBody.innerHTML = `<tr><td colspan="4" class="text-center">Không có thuyền viên phù hợp.</td></tr>`;
       return;
     }
 
-    filteredData.forEach((row) => {
+    data.forEach((row) => {
       let tableRow = document.createElement("tr");
       tableRow.classList.add("seaman-row");
 
       tableRow.innerHTML = `
-            <td>${row[2]}</td>  <!-- Tên thuyền viên (cột 3) -->
-            <td>${row[3]}</td>  <!-- Hộ chiếu (cột 4) -->
-            <td>${row[4]}</td>  <!-- Ngày nhập cảnh (cột 5) -->
+            <td>${row.name}</td>
+            <td>${row.passport_number}</td>
+            <td>${row.entry_date}</td>
             <td><button class="btn btn-primary btn-sm selectSeaman" 
-                data-name="${row[2]}" data-passport="${row[3]}" data-entry="${row[4]}">Select</button></td>
+                data-name="${row.name}" data-passport="${row.passport_number}" data-entry="${row.entry_date}">Select</button></td>
         `;
 
       tableBody.appendChild(tableRow);
     });
 
-    setupSearch(); // ✅ Gọi lại filter sau khi dữ liệu đã load
+    setupSearch();
 
     // Xử lý sự kiện khi ấn "Select"
     document.querySelectorAll(".selectSeaman").forEach((button) => {
@@ -85,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = this.getAttribute("data-name") || "";
         const passport = this.getAttribute("data-passport") || "";
         const entryDate = this.getAttribute("data-entry") || "";
-        const shipName = document.title.trim(); // Kiểm tra lại nếu lấy từ title
+        const shipName = document.title.trim();
 
         console.log("🚀 Debug gửi:", { name, passport, entryDate, shipName });
 
