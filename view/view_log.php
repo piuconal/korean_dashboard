@@ -1,4 +1,6 @@
 <?php
+include '../db/connect.php'; // Kết nối cơ sở dữ liệu
+
 $logFile = '../logs/seaman_changes.json'; // Đường dẫn file JSON
 
 // Kiểm tra nếu file tồn tại
@@ -14,7 +16,27 @@ $logs = json_decode($jsonData, true);
 if (!$logs) {
     die("No log data available.");
 }
+
+// Lấy tên tàu từ bảng ships
+$ships = [];
+$shipQuery = "SELECT id, name, area_id FROM ships";
+$shipResult = mysqli_query($conn, $shipQuery);
+while ($shipRow = mysqli_fetch_assoc($shipResult)) {
+    $ships[$shipRow['id']] = [
+        'name' => $shipRow['name'],
+        'area_id' => $shipRow['area_id']
+    ];
+}
+
+// Lấy tên khu vực từ bảng area
+$areas = [];
+$areaQuery = "SELECT id, name FROM area";
+$areaResult = mysqli_query($conn, $areaQuery);
+while ($areaRow = mysqli_fetch_assoc($areaResult)) {
+    $areas[$areaRow['id']] = $areaRow['name'];
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +73,8 @@ if (!$logs) {
 <table>
     <tr>
         <!-- <th>ID</th> -->
-        <!-- <th>Ship ID</th> -->
+        <th>Tên tàu</th>
+        <th>Khu vực</th>
         <th>Name</th>
         <th>Passport Number</th>
         <th>Entry Date</th>
@@ -73,7 +96,8 @@ if (!$logs) {
     <?php foreach ($logs as $log): ?>
         <tr>
             <!-- <td><?php echo $log['updated_row']['id'] ?? '-'; ?></td> -->
-            <!-- <td><?php echo $log['updated_row']['ship_id'] ?? '-'; ?></td> -->
+            <td><?php echo htmlspecialchars($ships[$log['updated_row']['ship_id']]['name'] ?? '-'); ?></td>
+            <td><?php echo htmlspecialchars($areas[$ships[$log['updated_row']['ship_id']]['area_id']] ?? '-'); ?></td>
             <td><?php echo $log['updated_row']['name'] ?? '-'; ?></td>
             <td><?php echo $log['updated_row']['passport_number'] ?? '-'; ?></td>
             <td><?php echo $log['updated_row']['entry_date'] ?? '-'; ?></td>
