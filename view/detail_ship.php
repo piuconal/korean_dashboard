@@ -153,6 +153,8 @@ $stmt->close();
             <input type="number" id="registrationFee" class="form-control me-2" 
                 value="<?php echo htmlspecialchars($registration_fee); ?>" 
                 style="width: 160px; font-size: 30px;">
+            <!-- Nút Lưu (ẩn mặc định) -->
+            <button id="saveButton" class="btn btn-success ms-2" style="margin-right: 10px;display: none;">Save</button>
 
             <input type="checkbox" id="confirmFee" class="form-check-input" 
                 style="width: 30px; height: 30px;" 

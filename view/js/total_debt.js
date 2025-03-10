@@ -30,8 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let registrationFee = parseFloat(registrationFeeInput.value) || 0;
 
       // Nếu checkbox được chọn, cộng thêm tiền đăng ký
-      if (confirmFeeCheckbox.checked) {
-        totalPending += registrationFee;
+      if (!confirmFeeCheckbox.checked) {
+        // Cộng thêm tiền đăng ký tùy thuộc vào trạng thái checkbox (1 hoặc 0)
+        totalPending += registrationFee * (confirmFeeCheckbox.checked ? 0 : 1);
       }
     }
 
