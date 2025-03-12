@@ -61,11 +61,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Lấy năm từ start_date
     $year = date('Y', strtotime($start_date));
 
-    // Cập nhật dữ liệu mới và trường year
-    $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ?, year = ? WHERE id = ?");
-    $stmt->bind_param("sssiii", $type, $start_date, $disembark_date, $moving_fee, $year, $id);
-    $stmt->execute();
-    $stmt->close();
+    // Kiểm tra xem year đã có hay chưa
+    $check_stmt = $conn->prepare("SELECT year FROM crew_members WHERE id = ?");
+    $check_stmt->bind_param("i", $id);
+    $check_stmt->execute();
+    $check_stmt->bind_result($existing_year);
+    $check_stmt->fetch();
+    $check_stmt->close();
+
+    // Nếu year chưa có (hoặc bằng 0), thực hiện cập nhật
+    if (empty($existing_year)) {
+        // Cập nhật dữ liệu mới và trường year
+        $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ?, year = ? WHERE id = ?");
+        $stmt->bind_param("sssiii", $type, $start_date, $disembark_date, $moving_fee, $year, $id);
+        $stmt->execute();
+        $stmt->close();
+    } else {
+        // Cập nhật mà không thay đổi trường year
+        $stmt = $conn->prepare("UPDATE crew_members SET type = ?, start_date = ?, disembark_date = ?, moving_fee = ? WHERE id = ?");
+        $stmt->bind_param("sssii", $type, $start_date, $disembark_date, $moving_fee, $id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
 
     // Cập nhật outstanding_amount
     $stmt = $conn->prepare("UPDATE crew_members SET outstanding_amount = ship_fee + moving_fee WHERE id = ?");

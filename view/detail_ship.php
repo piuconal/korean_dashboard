@@ -237,7 +237,7 @@ $stmt->close();
                                 $disembark_date = new DateTime($seaman['disembark_date']);
                                 $days = $disembark_date->diff($start_date)->days; // Số ngày chênh lệch
 
-                                $refund_amount = 132000 - (132000 / 365 * $days);
+                                $refund_amount = 132000 - (132000 / 365 * ($days % 365));
                                 echo number_format($refund_amount);
                             }
                             ?>
