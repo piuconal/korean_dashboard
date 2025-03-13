@@ -130,7 +130,7 @@ $stmt->close();
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="#" data-ship-id="<?php echo htmlspecialchars($ship_id); ?>">
             <?php echo htmlspecialchars($ship_name); ?>
             <?php if (isset($outstanding_status) && $outstanding_status == 1): ?>
                 <span>❗</span>
@@ -406,6 +406,7 @@ $stmt->close();
 <script src="../view/js/update_year.js"></script>
 <script src="../view/js/delete_seaman.js"></script>
 <script src="../view/js/update_registration_fee.js"></script>
+<script src="../view/js/update_registration_fee_status.js"></script>
 
 </body>
 </html>
