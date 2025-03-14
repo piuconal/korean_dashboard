@@ -206,7 +206,7 @@ $stmt->close();
                                     <span class="mr-3"><?php echo $seaman['year']; ?></span>
                                     
                                     <!-- "+" Button -->
-                                    <button type="button" class="btn btn-sm btn-outline-primary updateYearBtn" data-id="<?php echo $seaman['id']; ?>" onclick="confirmAction(this)">
+                                    <button type="button" class="btn btn-sm btn-outline-primary updateYearBtn" data-id="<?php echo $seaman['id']; ?>">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                     
@@ -407,16 +407,5 @@ $stmt->close();
 <script src="../view/js/delete_seaman.js"></script>
 <script src="../view/js/update_registration_fee.js"></script>
 <script src="../view/js/update_registration_fee_status.js"></script>
-<script>
-    function confirmAction(button) {
-    const dataId = button.getAttribute('data-id');
-    if (confirm("Bạn có chắc chắn muốn thực hiện hành động này không?")) {
-        // Nếu nhấn "OK"
-    } else {
-        // Nếu nhấn "Hủy"
-        console.log('Hành động đã bị hủy.');
-    }
-}
-</script>
 </body>
 </html>

@@ -3,6 +3,13 @@ $(document).ready(function () {
   $(".updateYearBtn").click(function () {
     var seamanId = $(this).data("id"); // Lấy ID của seaman từ thuộc tính data-id
 
+    // Gọi hàm xác nhận trước khi thực hiện AJAX
+    if (!confirm("Bạn có chắc chắn muốn thực hiện hành động này không?")) {
+      console.log("Hành động đã bị hủy.");
+      alert("Hành động đã bị hủy.");
+      return; // Dừng lại nếu nhấn "Hủy"
+    }
+
     // Gửi yêu cầu AJAX để cập nhật năm
     $.ajax({
       url: "update_year.php", // Đường dẫn tới PHP script cập nhật năm
@@ -21,8 +28,6 @@ $(document).ready(function () {
             type: "POST",
             data: { id: seamanId, ship_fee: 132000 }, // Gửi ship_fee = 132000
             success: function (updateResponse) {
-              console.log("Cập nhật ship_fee thành công với giá trị 132000");
-
               // Tải lại trang sau khi cập nhật thành công
               location.reload(); // Tải lại trang
             },
