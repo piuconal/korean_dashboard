@@ -230,14 +230,21 @@ $stmt->close();
                         </td>
 
                         <td style="color: green;">
-                            <?php
+                        <?php
                             $refund_amount = 0;
+                            $base_amount = 132000;
+
                             if ($seaman['ship_fee'] == 0 && !empty($seaman['start_date']) && !empty($seaman['disembark_date']) && $seaman['disembark_date'] !== '0000-00-00') {
                                 $start_date = new DateTime($seaman['start_date']);
                                 $disembark_date = new DateTime($seaman['disembark_date']);
-                                $days = $disembark_date->diff($start_date)->days; // Số ngày chênh lệch
+                                
+                                $interval = $start_date->diff($disembark_date);
+                                $months = $interval->m; // Số tháng
+                                $days = $interval->d;   // Số ngày
 
-                                $refund_amount = 132000 - (132000 / 365 * ($days % 365));
+                                // Tính tiền hoàn lại
+                                $refund_amount = $base_amount - ((11000 * $months) + (360 * ($days+1)));
+
                                 echo number_format($refund_amount);
                             }
                             ?>
